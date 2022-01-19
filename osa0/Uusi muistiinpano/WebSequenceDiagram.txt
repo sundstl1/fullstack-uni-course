@@ -1,0 +1,29 @@
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+palvelin-->selain: HTML-koodi 302 Redirect /exampleapp/notes
+
+note over selain:
+selain lataa /notes sivun uudestaan
+palvelimen ohjeesta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: data.json
+palvelin-->selain: [{"content":"","date":"2022-01-18T21:08:29.289Z"}, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/favico.ico
+palvelin-->selain: favico.ico
