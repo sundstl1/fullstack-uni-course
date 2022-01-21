@@ -1,0 +1,15 @@
+note over selain:
+Käyttäjä painaa save nappia 
+end note
+
+note over selain:
+selaimen js koodi lisää uuden noten näkymään
+end note
+
+note over selain:
+selaimen js koodi ohjeistaa selaimen
+lähettämään uuden noten palvelimelle
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi//exampleapp/new_note_spa
+palvelin-->selain: {"message":"note created"}
