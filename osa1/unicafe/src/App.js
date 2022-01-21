@@ -16,6 +16,21 @@ const Button = (props) => (
   </button>
 )
 
+const Statistics = ({good, neutral, bad}) => {
+  const count = good + neutral + bad
+  const value = good - bad
+  const average = value / count
+  const positive = good / count
+
+  return (
+    <div>
+      all {count}<br/>
+      average {average}<br/>
+      positive {positive * 100} %
+    </div>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -32,6 +47,7 @@ const App = () => {
       <Display name="good" value={good} />
       <Display name="neutral" value={neutral} />
       <Display name="bad" value={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
