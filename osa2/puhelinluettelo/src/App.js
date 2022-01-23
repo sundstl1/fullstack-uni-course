@@ -3,6 +3,7 @@ import axios from 'axios'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
 import FilterForm from './components/FilterForm'
+import contactService from './services/contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,10 +12,10 @@ const App = () => {
   const [Filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    contactService
+      .getAll()
+        .then(initialContacts => {
+        setPersons(initialContacts)
       })
   }, [])
 
@@ -28,18 +29,25 @@ const App = () => {
     event.preventDefault()
     
     if (persons.map(p => p.name).includes(newName)){
-      window.alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace old number with a new one?`)){
+        updateContact(newName, newNumber)
+      }
+      setNewName('')
+      setNewNumber('')
     }
     else {
       const contactObject = {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(contactObject))
+      contactService
+      .create(contactObject)
+        .then(returnedContact => {
+        setPersons(persons.concat(returnedContact))
+        setNewName('')
+        setNewNumber('')
+      })
     }
-    
-    setNewName('')
-    setNewNumber('')
   }
 
   const IgnoreOnSubmit = (event) => {
@@ -56,6 +64,33 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
+  }
+
+  const deleteContact = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)){
+      contactService
+      .deleteObject(id)
+      .then(
+        setPersons(persons.filter(p => p.id !== id))
+      )
+    }
+  }
+
+  const updateContact = (name, newNumber) => {
+    const oldContact = persons.find(p => p.name === name)
+    const changedContact = { ...oldContact, number: newNumber }
+
+    contactService
+      .update(oldContact.id, changedContact)
+        .then(returnedContact => {
+        setPersons(persons.map(p => p.id !== oldContact.id ? p : returnedContact))
+      })
+      .catch(error => {
+        alert(
+          `the contact '${name}' was already deleted from server`
+        )
+        setPersons(persons.filter(p => p.name !== name))
+      })
   }
 
   return (
@@ -75,7 +110,7 @@ const App = () => {
         numberOnChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <ContactList contacts={contactsToShow} />
+      <ContactList contacts={contactsToShow} deleteContact={deleteContact} updateContact={updateContact} />
     </div>
   )
 
