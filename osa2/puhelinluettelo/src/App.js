@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
 import FilterForm from './components/FilterForm'
+import Notification from './components/Notification'
 import contactService from './services/contacts'
+
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [Filter, setFilter] = useState('')
+  const[errorMessage, setErrorMessage] = useState('some error happened...')
+  const[successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     contactService
@@ -44,6 +47,7 @@ const App = () => {
       .create(contactObject)
         .then(returnedContact => {
         setPersons(persons.concat(returnedContact))
+        showUserMessage(`Added ${newName}`)
         setNewName('')
         setNewNumber('')
       })
@@ -70,9 +74,18 @@ const App = () => {
     if (window.confirm(`Delete ${name} ?`)){
       contactService
       .deleteObject(id)
-      .then(
+      .then( p=> {
         setPersons(persons.filter(p => p.id !== id))
+        showUserMessage(`Deleted ${name}`)
+      }
       )
+      .catch(error => {
+        showErrorMessage(
+          `Information of '${name}' has already been removed from server`
+        )
+        setPersons(persons.filter(p => p.name !== name))
+      })
+      
     }
   }
 
@@ -84,18 +97,35 @@ const App = () => {
       .update(oldContact.id, changedContact)
         .then(returnedContact => {
         setPersons(persons.map(p => p.id !== oldContact.id ? p : returnedContact))
+        showUserMessage(`Updated ${name}`)
       })
       .catch(error => {
-        alert(
-          `the contact '${name}' was already deleted from server`
+        showErrorMessage(
+          `Information of '${name}' has already been removed from server`
         )
         setPersons(persons.filter(p => p.name !== name))
       })
   }
 
+  const showUserMessage = message => {
+    setSuccessMessage(message)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
+
+  const showErrorMessage = message => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} className="userMessage" />
+      <Notification message={errorMessage} className="error" />
       <FilterForm
         inputValue={Filter}
         onChange={handleFilterChange}
