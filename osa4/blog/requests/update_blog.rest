@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/6207c9da4d3d3cf96e132a81
+Content-Type: application/json
+
+{
+    "author": "Aku Ankka2",
+    "title": "butter factory times2",
+    "url": "www.butter.quack2",
+    "likes": 3132
+}
