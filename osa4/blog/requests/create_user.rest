@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/users
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF1YWNrIiwiaWQiOiI2MjE2NDA1OTU5NjgwOTA0NTE2ZWY4MzQiLCJpYXQiOjE2NDU2Mjc5MjcsImV4cCI6MTY0NTYzMTUyN30.jmCstusa4cMlLVF3fGFUPLJWUGEMoP4ghqaNdb-leqE
 
 {
     "name": "Aku Ankka",
     "password": "butter factory times",
-    "username": "quack"
+    "username": "quack2"
 }
