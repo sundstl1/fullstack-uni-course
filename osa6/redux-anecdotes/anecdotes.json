@@ -1,0 +1,114 @@
+{
+  "anecdotes": [
+    {
+      "content": "If it hurts, do it more often",
+      "id": "47145",
+      "votes": 0
+    },
+    {
+      "content": "Adding manpower to a late software project makes it later!",
+      "id": "21149",
+      "votes": 5
+    },
+    {
+      "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+      "id": "69581",
+      "votes": 10
+    },
+    {
+      "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+      "id": "36975",
+      "votes": 2
+    },
+    {
+      "content": "Premature optimization is the root of all evil.",
+      "id": "25170",
+      "votes": 24
+    },
+    {
+      "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+      "id": "98312",
+      "votes": 3
+    },
+    {
+      "content": "adding new anecdote",
+      "votes": 0,
+      "id": "ZcgSQmI"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "D6LxmlJ"
+    },
+    {
+      "content": "asdsad",
+      "id": "pAAwuID",
+      "votes": 1
+    },
+    {
+      "content": "asd",
+      "votes": 0,
+      "id": "fO79GEs"
+    },
+    {
+      "content": "asdsadsadasdsadas",
+      "votes": 0,
+      "id": "w1cZQjG"
+    },
+    {
+      "content": "sdasdasdas",
+      "votes": 0,
+      "id": "GgRJEbE"
+    },
+    {
+      "content": "test2",
+      "votes": 0,
+      "id": "iyu0Fgp"
+    },
+    {
+      "content": "now then",
+      "votes": 0,
+      "id": "h-XUoeq"
+    },
+    {
+      "content": "sadsad",
+      "votes": 0,
+      "id": "k82x5SV"
+    },
+    {
+      "content": "sasdasdasdasdasdsadsadasdasdsadas",
+      "votes": 0,
+      "id": "6TwHs3U"
+    },
+    {
+      "content": "tetsdsfdsdf",
+      "votes": 0,
+      "id": "Kd4fleC"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "xE7UtUM"
+    },
+    {
+      "content": "rerwrwerer",
+      "votes": 0,
+      "id": "DRxFBbn"
+    },
+    {
+      "content": "sewww",
+      "votes": 0,
+      "id": "M8SqvtQ"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "pNvY2hG"
+    },
+    {
+      "content": "sssssasdaasd",
+      "votes": 0,
+      "id": "LTqccVU"
+    }
+  ]
+}
