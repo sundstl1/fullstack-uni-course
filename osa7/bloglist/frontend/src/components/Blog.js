@@ -1,7 +1,11 @@
 import { useState } from 'react'
+import { voteBlog, removeBlog } from '../reducers/blogReducer'
+import { connect } from 'react-redux'
 
-const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
+const Blog = (props) => {
   const [showFull, setShowFull] = useState(false)
+  const blog = props.blog
+  const username = props.username
 
   const toggleFullInfo = () => {
     setShowFull(!showFull)
@@ -57,15 +61,21 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
   }
 
   const handleLike = () => {
-    blog.likes = blog.likes + 1
-    updateBlog(blog)
+    props.voteBlog(blog, blog.id)
   }
 
   const handleDelete = () => {
-    deleteBlog(blog)
+    props.removeBlog(blog.id)
   }
 
   return showFull ? longBlog(blog) : shortBlog(blog)
 }
 
-export default Blog
+const mapDispatchToProps = {
+  voteBlog,
+  removeBlog,
+}
+
+const ConnectedForm = connect(null, mapDispatchToProps)(Blog)
+
+export default ConnectedForm

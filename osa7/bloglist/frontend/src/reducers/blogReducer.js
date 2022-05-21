@@ -18,17 +18,24 @@ const blogsSlice = createSlice({
       state.push(content)
       sortByVotes(state)
     },
+    deleteBlog(state, action) {
+      const itemId = action.payload
+      return state.filter(({ id }) => id !== itemId)
+    },
     setBlogs(state, action) {
       console.log('set', action.payload)
       return sortByVotes(action.payload)
     },
     voteOn(state, action) {
       const id = action.payload
-      const blogToVote = state.find((a) => a.id === id)
+      const blogToVote = state.find((blog) => blog.id === id)
+      console.log(state.blogs)
+      console.log('voting', blogToVote)
       const changedBlog = {
         ...blogToVote,
-        votes: blogToVote.votes + 1,
+        likes: blogToVote.likes + 1,
       }
+      console.log('changed', changedBlog)
       return sortByVotes(
         state.map((blog) => (blog.id !== id ? blog : changedBlog))
       )
@@ -36,7 +43,7 @@ const blogsSlice = createSlice({
   },
 })
 
-export const { addBlog, setBlogs, voteOn } = blogsSlice.actions
+export const { addBlog, deleteBlog, setBlogs, voteOn } = blogsSlice.actions
 export default blogsSlice.reducer
 
 export const initializeBlogs = () => {
@@ -49,15 +56,25 @@ export const initializeBlogs = () => {
 export const createBlog = (content) => {
   return async (dispatch) => {
     console.log(`creating blog ${content}`)
-    const newBlog = await blogService.createNew(content)
+    const newBlog = await blogService.create(content)
     dispatch(addBlog(newBlog))
   }
 }
 
-export const updateBlog = (blog, id, votes) => {
+export const voteBlog = (blog, id) => {
   return async (dispatch) => {
-    console.log(`updating blog ${blog.content} ${votes}`)
-    const newAnecdote = await blogService.update(blog, id)
+    console.log(`updating blog ${blog} `)
+    console.log(blog)
+    const newAnecdote = await blogService.update(
+      {
+        user: blog.user.id,
+        likes: blog.likes + 1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url,
+      },
+      id
+    )
     dispatch(voteOn(newAnecdote.id))
   }
 }
@@ -65,8 +82,15 @@ export const updateBlog = (blog, id, votes) => {
 export const updateBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
-    console.log('blogs', blogs)
     blogs.sort((a, b) => b.likes - a.likes)
     dispatch(setBlogs(blogs))
+  }
+}
+
+export const removeBlog = (id) => {
+  return async (dispatch) => {
+    const blogs = await blogService.remove(id)
+    console.log('deleting from db', id)
+    dispatch(deleteBlog(id))
   }
 }

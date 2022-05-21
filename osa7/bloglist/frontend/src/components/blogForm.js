@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
+const BlogForm = (props) => {
   const handleNewBlog = async (event) => {
     event.preventDefault()
+    const title = event.target.title.value
+    const author = event.target.author.value
+    const url = event.target.url.value
+
     const newBlog = {
       title: title,
       author: author,
       url: url,
       likes: 0,
     }
-    await createBlog(newBlog)
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+
+    props.createBlog(newBlog)
+    props.setNotification(`you added blog ${newBlog.title}`, 5)
+
+    event.target.title.value = ''
+    event.target.author.value = ''
+    event.target.url.value = ''
   }
 
   return (
@@ -24,33 +29,15 @@ const BlogForm = ({ createBlog }) => {
       <form onSubmit={handleNewBlog}>
         <div>
           title:
-          <input
-            type="text"
-            value={title}
-            name="title"
-            onChange={({ target }) => setTitle(target.value)}
-            id="blog-title"
-          />
+          <input type="text" name="title" id="blog-title" />
         </div>
         <div>
           author:
-          <input
-            type="text"
-            value={author}
-            name="author"
-            onChange={({ target }) => setAuthor(target.value)}
-            id="blog-author"
-          />
+          <input type="text" name="author" id="blog-author" />
         </div>
         <div>
           url:
-          <input
-            type="text"
-            value={url}
-            name="url"
-            onChange={({ target }) => setUrl(target.value)}
-            id="blog-url"
-          />
+          <input type="text" name="url" id="blog-url" />
         </div>
         <button type="submit" id="create-blog-button">
           create
@@ -60,4 +47,17 @@ const BlogForm = ({ createBlog }) => {
   )
 }
 
-export default BlogForm
+const mapStateToProps = (state) => {
+  return {
+    filter: state.filter,
+  }
+}
+
+const mapDispatchToProps = {
+  createBlog,
+  setNotification,
+}
+
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(BlogForm)
+
+export default ConnectedForm

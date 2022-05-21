@@ -63,16 +63,6 @@ const App = () => {
     }
   }
 
-  const createBlog = async (blog) => {
-    try {
-      await blogService.create(blog)
-      await updateBlogs()
-      dispatch(setNotification('Created new blog!', 5))
-    } catch (exception) {
-      dispatch(setNotification('failed to save blog!', 5))
-    }
-  }
-
   const updateBlog = async (blog) => {
     try {
       const blogToUpdate = {
@@ -140,7 +130,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification className="userMessage" />
       <Togglable buttonLabel="create new blog">
-        <BlogForm createBlog={createBlog} />
+        <BlogForm />
       </Togglable>
 
       <div>
@@ -148,13 +138,7 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </div>
       {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          updateBlog={updateBlog}
-          deleteBlog={deleteBlog}
-          username={user.username}
-        />
+        <Blog key={blog.id} blog={blog} username={user.username} />
       ))}
     </div>
   )
