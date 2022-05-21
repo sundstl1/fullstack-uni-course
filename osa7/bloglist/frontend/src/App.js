@@ -5,35 +5,29 @@ import Notification from './components/notification'
 import Togglable from './components/toggleable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification } from './reducers/notificationReducer'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const dispatch = useDispatch()
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
-    updateBlogs()
-  }, [])
+    dispatch(updateBlogs())
+  }, [dispatch])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
     }
   }, [])
-
-  const updateBlogs = async () => {
-    const blogs = await blogService.getAll()
-    console.log(blogs)
-    blogs.sort((a, b) => b.likes - a.likes)
-    console.log(blogs)
-    setBlogs(blogs)
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -43,12 +37,12 @@ const App = () => {
         password,
       })
 
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      showUserMessage('Logged in!')
+      dispatch(setNotification('Logged in!'), 5)
     } catch (exception) {
-      showErrorMessage('wrong credentials')
+      dispatch(setNotification('wrong credentials'), 5)
     } finally {
       setUsername('')
       setPassword('')
@@ -58,38 +52,24 @@ const App = () => {
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
-      window.localStorage.removeItem('loggedNoteappUser')
+      window.localStorage.removeItem('loggedBlogappUser')
       blogService.setToken(user.token)
       setUser(null)
       setUsername('')
       setPassword('')
-      showUserMessage('Successfully logged out')
+      dispatch(setNotification('Successfully logged out', 5))
     } catch (exception) {
-      showErrorMessage('failed to log out')
+      dispatch(setNotification('failed to log out', 5))
     }
-  }
-
-  const showUserMessage = (message) => {
-    setSuccessMessage(message)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
-  }
-
-  const showErrorMessage = (message) => {
-    setErrorMessage(message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
   }
 
   const createBlog = async (blog) => {
     try {
       await blogService.create(blog)
       await updateBlogs()
-      showUserMessage('Created new blog!')
+      dispatch(setNotification('Created new blog!', 5))
     } catch (exception) {
-      showErrorMessage('failed to save blog!')
+      dispatch(setNotification('failed to save blog!', 5))
     }
   }
 
@@ -104,9 +84,10 @@ const App = () => {
       }
       await blogService.update(blogToUpdate, blog.id)
       await updateBlogs()
-      showUserMessage('blog updated!')
+      console.log('updating!')
+      dispatch(setNotification(`blog updated!`, 5))
     } catch (exception) {
-      showErrorMessage('failed to update blog!')
+      dispatch(setNotification('failed to update blog!', 5))
     }
   }
 
@@ -115,18 +96,17 @@ const App = () => {
       if (window.confirm(`Remove blog ${blog.title}?`)) {
         await blogService.remove(blog.id)
         await updateBlogs()
-        showUserMessage('blog deleted!')
+        dispatch(setNotification('blog deleted!', 5))
       }
     } catch (exception) {
-      showErrorMessage('failed to delete blog!')
+      dispatch(setNotification('failed to delete blog!', 5))
     }
   }
 
   const loginForm = () => (
     <div>
       <h2>log in to application</h2>
-      <Notification message={successMessage} className="userMessage" />
-      <Notification message={errorMessage} className="error" />
+      <Notification className="userMessage" />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -154,11 +134,11 @@ const App = () => {
       </form>
     </div>
   )
+
   const blogView = () => (
     <div>
       <h2>blogs</h2>
-      <Notification message={successMessage} className="userMessage" />
-      <Notification message={errorMessage} className="error" />
+      <Notification className="userMessage" />
       <Togglable buttonLabel="create new blog">
         <BlogForm createBlog={createBlog} />
       </Togglable>
@@ -178,7 +158,6 @@ const App = () => {
       ))}
     </div>
   )
-
   return <div>{user === null ? loginForm() : blogView()}</div>
 }
 
