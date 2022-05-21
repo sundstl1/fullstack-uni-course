@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
-  const [showFull, setShowFull] = useState(false);
+  const [showFull, setShowFull] = useState(false)
 
   const toggleFullInfo = () => {
-    setShowFull(!showFull);
-  };
+    setShowFull(!showFull)
+  }
 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
   const shortBlog = () => (
     <div style={blogStyle} className="blog">
@@ -22,7 +22,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
         view
       </button>
     </div>
-  );
+  )
 
   const longBlog = () => {
     return (
@@ -53,19 +53,19 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
           void 0
         )}
       </div>
-    );
-  };
+    )
+  }
 
   const handleLike = () => {
-    blog.likes = blog.likes + 1;
-    updateBlog(blog);
-  };
+    blog.likes = blog.likes + 1
+    updateBlog(blog)
+  }
 
   const handleDelete = () => {
-    deleteBlog(blog);
-  };
+    deleteBlog(blog)
+  }
 
-  return showFull ? longBlog(blog) : shortBlog(blog);
-};
+  return showFull ? longBlog(blog) : shortBlog(blog)
+}
 
-export default Blog;
+export default Blog
