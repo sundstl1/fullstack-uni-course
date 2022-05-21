@@ -89,7 +89,7 @@ export const updateBlogs = () => {
 
 export const removeBlog = (id) => {
   return async (dispatch) => {
-    const blogs = await blogService.remove(id)
+    await blogService.remove(id)
     console.log('deleting from db', id)
     dispatch(deleteBlog(id))
   }
